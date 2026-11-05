@@ -1,0 +1,20 @@
+GIS CLICKER — Android Studio project
+
+This folder is a native Android WebView wrapper around the offline game.
+It launches directly into the game, with no browser address bar. JavaScript
+and DOM storage are enabled so the clicker logic and local progress saving work.
+
+To build the APK:
+1. Install Android Studio (with Android SDK Platform 35).
+2. Open this folder as an existing project.
+3. Allow Gradle sync to finish (requires internet on first sync to fetch Android Gradle Plugin).
+4. Choose Build > Build Bundle(s) / APK(s) > Build APK(s).
+5. Find the APK at app/build/outputs/apk/debug/app-debug.apk.
+
+Application name: GIS CLICKER
+Application ID: com.gis.clicker
+Minimum Android: 6.0 (API 23)
+
+Note: This environment does not have Android SDK, Gradle, or Android build tools,
+so it cannot compile/sign the binary APK here. This is the complete Android Studio
+source project, not an APK file. Build it in Android Studio using the steps above.
