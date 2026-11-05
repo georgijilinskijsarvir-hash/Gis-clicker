@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d1c"><title>GIS CLICKER</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#101522;--panel:#1b2435;--panel2:#253249;--text:#f5f7fb;--muted:#9eacc2;--accent:#ff9d35;--accent2:#ffd166;--line:#34435b;--good:#55d6a2}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#344766 0%,var(--bg) 60%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
+button{font:inherit;color:inherit;border:0;cursor:pointer}button:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+.app{max-width:1080px;margin:auto;padding:22px 18px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{font-weight:1000;letter-spacing:2px;font-size:clamp(22px,4vw,34px);text-shadow:0 3px 0 #000}.brand span{color:var(--accent)}
+.pill{background:#202d42;border:1px solid var(--line);padding:9px 13px;border-radius:99px;color:var(--muted);font-size:13px}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:18px}
+.panel{background:linear-gradient(145deg,rgba(36,51,74,.96),rgba(23,32,49,.98));border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 45px #0005}
+.scorebox{text-align:center;padding:16px 12px 6px}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--muted);font-weight:800}.score{font-size:clamp(38px,8vw,62px);font-weight:1000;letter-spacing:-2px;margin:4px 0}.sub{color:var(--muted);font-size:13px}
+.stage{height:310px;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:18px;margin:15px 0;background:linear-gradient(180deg,#314a5c,#1a2636 65%,#17202d);border:1px solid #53647b}
+.stage.space{background:radial-gradient(circle at 50% 35%,#534080,#1a1d42 65%,#11152a)}.stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:28px 28px}
+.character{position:relative;z-index:1;width:min(65%,245px);height:255px;object-fit:contain;filter:drop-shadow(0 14px 12px #0008);user-select:none;pointer-events:none;transition:transform .12s}.character.bop{transform:scale(.94) rotate(-2deg)}
+.clickbtn{width:100%;border-radius:15px;padding:16px;background:linear-gradient(180deg,#ffbd58,#f18a25);color:#311b08;font-weight:1000;font-size:18px;box-shadow:0 5px 0 #a95212,0 10px 25px #0004;transition:.08s}.clickbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #a95212}.floating{position:absolute;z-index:3;font-size:24px;font-weight:1000;color:#ffe08a;text-shadow:0 2px 4px #000;pointer-events:none;animation:float .8s ease-out forwards}@keyframes float{to{transform:translateY(-90px);opacity:0}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stat{background:#111b2a99;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}.stat b{display:block;font-size:18px}.stat small{color:var(--muted);font-size:11px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}.sectionhead h2{font-size:17px;margin:0;letter-spacing:.5px}.tag{font-size:10px;color:var(--accent2);font-weight:900;letter-spacing:1px}
+.upgrades{display:grid;gap:10px}.upgrade{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:10px;background:#111b2a99;border:1px solid var(--line);border-radius:14px;padding:12px}.uicon{width:40px;height:40px;border-radius:12px;background:#33435a;display:grid;place-items:center;font-size:22px}.utitle{font-weight:850;font-size:14px}.udesc{font-size:11px;color:var(--muted);margin-top:3px}.buy{background:#f5a33b;color:#2d1a08;border-radius:10px;padding:9px 11px;font-size:12px;font-weight:950;min-width:82px}.buy:disabled{background:#48566a;color:#aab4c2;cursor:not-allowed}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{padding:9px 13px;background:#111b2a;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-weight:800;font-size:12px}.tab.active{background:#f5a33b;color:#2d1a08;border-color:#f5a33b}
+.bottom{margin-top:18px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{background:#111b2a;border:1px solid var(--line);border-radius:13px;padding:12px;text-align:left}.choice.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.choice strong{display:block;font-size:13px}.choice small{color:var(--muted)}.secondary{background:#34435b;border:1px solid #53647b;border-radius:11px;padding:10px 13px;font-weight:800;font-size:12px}.danger{color:#ff9a9a;border-color:#8b4242}.hidden{display:none!important}.notice{color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.app{padding:15px 12px 35px}.stage{height:270px}.panel{padding:15px}.top{align-items:flex-start}.pill{font-size:11px}}
+
+/* HIS CLICKER visual refresh */
+:root{--bg:#090d1c;--panel:#141a30;--panel2:#202747;--text:#f4f5ff;--muted:#a4aed0;--accent:#9b7bff;--accent2:#55e6ff;--line:#35365f;--good:#64e6bd}
+body{background:radial-gradient(ellipse at 50% -15%,#493b8b 0%,#171b3b 34%,#090d1c 72%);font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif}
+.brand{letter-spacing:3px;text-shadow:0 0 22px #9b7bff77}.brand span{color:#55e6ff}
+.panel{background:linear-gradient(145deg,rgba(28,32,66,.97),rgba(15,20,43,.99));border-color:#424477;box-shadow:0 18px 55px #0007, inset 0 1px #ffffff0a}
+.pill{background:#171d3a;border-color:#48477b;color:#c4c9ec}
+.stage{background:radial-gradient(ellipse at 50% 35%,#41417c,#171d3b 65%,#10162d);border-color:#55518c}
+.stage:before{background-image:linear-gradient(#a9a5ff10 1px,transparent 1px),linear-gradient(90deg,#a9a5ff10 1px,transparent 1px)}
+.stage.space{background:radial-gradient(circle at 50% 35%,#514b9b,#171b42 65%,#0b1026)}
+.clickbtn{background:linear-gradient(115deg,#a88aff,#54ddf2);color:#10152d;box-shadow:0 5px 0 #5144a1,0 10px 28px #0005}
+.clickbtn:active{box-shadow:0 1px 0 #5144a1}
+.upgrade,.stat,.choice{background:#101630;border-color:#393e6c}
+.uicon{background:#292c57}
+.buy{background:linear-gradient(120deg,#b49aff,#60e4f4);color:#11152e}
+.buy:disabled{background:#424867;color:#aab0ca}
+.tab{background:#101630;border-color:#393e6c;color:#adb6db}
+.tab.active{background:linear-gradient(120deg,#b49aff,#60e4f4);color:#11152e;border-color:transparent}
+.secondary{background:#292e59;border-color:#4c5184}
+.choice.active{border-color:#55e6ff;box-shadow:inset 0 0 0 1px #55e6ff,0 0 18px #55e6ff22}
+.score{background:linear-gradient(90deg,#fff,#b9a7ff,#65e8f5);background-clip:text;color:transparent}
+
+</style></head>
+<body><main class="app">
+<header class="top"><div class="brand">GIS <span>CLICKER</span></div><div style="display:flex;gap:8px;align-items:center"><button class="secondary" id="installBtn" hidden>⬇ Установить</button><div class="pill">✦ PIXEL IDLE</div></div></header>
+<div class="layout">
+<section class="panel">
+ <div class="scorebox"><div class="eyebrow">ТВОИ МОНЕТЫ</div><div class="score" id="score">0</div><div class="sub">⚡ <span id="perSec">0</span> в секунду · <span id="perClick">1</span> за клик</div></div>
+ <div class="stage" id="stage"><img class="character" id="character" src="assets/matik_skin.jpg" alt="Персонаж Matik"><div id="floatLayer"></div></div>
+ <button class="clickbtn" id="clickBtn">⛏️ ДОБЫВАТЬ МОНЕТЫ</button>
+ <div class="stats"><div class="stat"><b id="totalClicks">0</b><small>КЛИКОВ</small></div><div class="stat"><b id="critCount">0</b><small>КРИТЫ</small></div><div class="stat"><b id="autoCount">0</b><small>АВТО-КЛИКЕРЫ</small></div></div>
+</section>
+<section class="panel">
+ <div class="sectionhead"><h2>UPGRADES STORE</h2><span class="tag">УЛУЧШЕНИЯ</span></div>
+ <div class="upgrades" id="upgrades"></div>
+ <div class="notice">Покупай улучшения, чтобы быстрее собирать монеты. Прогресс автоматически сохраняется в этом браузере.</div>
+</section></div>
+<section class="panel bottom">
+ <div class="tabs"><button class="tab active" data-tab="skins">🎭 Скины</button><button class="tab" data-tab="themes">🌌 Темы</button><button class="tab" data-tab="stats">📊 Статистика</button><button class="tab" data-tab="settings">⚙️ Настройки</button></div>
+ <div id="skins" class="tabcontent"><div class="two">
+  <button class="choice active" data-skin="matik"><strong>🕴️ Matik</strong><small>Оригинальный персонаж</small></button>
+  <button class="choice" data-skin="minecraft"><strong>🧱 Minecraft</strong><small>Альтернативный скин</small></button>
+ </div></div>
+ <div id="themes" class="tabcontent hidden"><div class="two">
+  <button class="choice active" data-theme="nether"><strong>🔥 Theme: Nether</strong><small>Тёмный мир с огнями</small></button>
+  <button class="choice" data-theme="space"><strong>🚀 Theme: Space</strong><small>Космическая атмосфера</small></button>
+ </div></div>
+ <div id="stats" class="tabcontent hidden"><div class="stats">
+  <div class="stat"><b id="sEarned">0</b><small>ВСЕГО ЗАРАБОТАНО</small></div><div class="stat"><b id="sBest">0</b><small>БАЛАНС МАКС.</small></div><div class="stat"><b id="sPower">1</b><small>СИЛА КЛИКА</small></div>
+ </div></div>
+ <div id="settings" class="tabcontent hidden"><div class="two"><div><strong>Настройки игры</strong><p class="notice">Звук и сохранение прогресса доступны локально в браузере.</p><button class="secondary" id="saveBtn">💾 Сохранить сейчас</button></div><div><strong>Danger Zone</strong><p class="notice">Сбросит монеты и все улучшения.</p><button class="secondary danger" id="resetBtn">Reset Progress</button></div></div></div>
+</section>
+<p class="notice" style="text-align:center">GIS CLICKER · твоя пиксельная кликер-игра</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const defaults={score:0,earned:0,best:0,clicks:0,crits:0,pick:0,gold:0,auto:0,crit:0,mult:1,skin:"matik",theme:"nether"};
+let state={...defaults};
+try{state={...state,...JSON.parse(localStorage.getItem("matikClickerSave")||"{}")}}catch(e){}
+const defs=[
+ {id:"pick",icon:"⛏️",name:"Pickaxe +1",desc:"Увеличивает силу каждого клика",base:25,scale:1.65},
+ {id:"gold",icon:"💪",name:"Power +1",desc:"Дополнительная мощность добычи",base:100,scale:1.9},
+ {id:"auto",icon:"🤖",name:"Auto: +1",desc:"Автоматически добывает монеты в секунду",base:150,scale:1.8},
+ {id:"crit",icon:"💥",name:"CRIT +",desc:"Повышает шанс критического клика",base:250,scale:2.0},
+ {id:"mult",icon:"✖️",name:"Click X2",desc:"Удваивает награду за клик",base:800,scale:3.0}
+];
+const cost=u=>Math.floor(u.base*Math.pow(u.scale,state[u.id]||0));
+const fmt=n=>Math.floor(n).toLocaleString("ru-RU");
+const power=()=>Math.max(1,1+state.pick+state.gold);
+const perClick=()=>power()*Math.pow(2,state.mult);
+const perSec=()=>state.auto;
+function save(){localStorage.setItem("matikClickerSave",JSON.stringify(state))}
+function render(){
+ $("score").textContent=fmt(state.score);$("perSec").textContent=fmt(perSec());$("perClick").textContent=fmt(perClick());
+ $("totalClicks").textContent=fmt(state.clicks);$("critCount").textContent=fmt(state.crits);$("autoCount").textContent=fmt(state.auto);
+ $("sEarned").textContent=fmt(state.earned);$("sBest").textContent=fmt(state.best);$("sPower").textContent=fmt(perClick());
+ $("upgrades").innerHTML=defs.map(u=>{let c=cost(u),lvl=state[u.id]||0;return `<div class="upgrade"><div class="uicon">${u.icon}</div><div><div class="utitle">${u.name} <span style="color:var(--muted);font-size:11px">Lv.${lvl}</span></div><div class="udesc">${u.desc}</div></div><button class="buy" data-buy="${u.id}" ${state.score<c?"disabled":""}>${fmt(c)} 🪙</button></div>`}).join("");
+ $("character").src=state.skin==="minecraft"?"assets/minecraft_skin.jpg":"assets/matik_skin.jpg";
+ $("stage").classList.toggle("space",state.theme==="space");
+ document.querySelectorAll("[data-skin]").forEach(b=>b.classList.toggle("active",b.dataset.skin===state.skin));
+ document.querySelectorAll("[data-theme]").forEach(b=>b.classList.toggle("active",b.dataset.theme===state.theme));
+}
+function add(n){state.score+=n;state.earned+=n;state.best=Math.max(state.best,state.score)}
+function floatText(t){let el=document.createElement("div");el.className="floating";el.textContent=t;el.style.left=(42+Math.random()*16)+"%";el.style.top="42%";$("floatLayer").append(el);setTimeout(()=>el.remove(),850)}
+function click(){state.clicks++;let critChance=Math.min(.5,state.crit*.025);let isCrit=Math.random()<critChance;let amount=perClick()*(isCrit?5:1);if(isCrit)state.crits++;add(amount);floatText((isCrit?"CRIT! +":"+")+fmt(amount));let ch=$("character");ch.classList.add("bop");setTimeout(()=>ch.classList.remove("bop"),120);render();save()}
+$("clickBtn").addEventListener("click",click);
+$("stage").addEventListener("click",click);
+$("upgrades").addEventListener("click",e=>{let id=e.target.closest("[data-buy]")?.dataset.buy;if(!id)return;let u=defs.find(x=>x.id===id),c=cost(u);if(state.score<c)return;state.score-=c;state[u.id]++;render();save()});
+document.querySelectorAll("[data-skin]").forEach(b=>b.onclick=()=>{state.skin=b.dataset.skin;render();save()});
+document.querySelectorAll("[data-theme]").forEach(b=>b.onclick=()=>{state.theme=b.dataset.theme;render();save()});
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".tabcontent").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab))});
+$("saveBtn").onclick=()=>{save();$("saveBtn").textContent="✓ Сохранено";setTimeout(()=>$("saveBtn").textContent="💾 Сохранить сейчас",1300)};
+$("resetBtn").onclick=()=>{if(prompt("Type 'Reset Progress' to confirm:")==="Reset Progress"){state={...defaults};save();render()}};
+setInterval(()=>{if(state.auto>0){add(state.auto);render();save()}},1000);
+render();
+</script>
+<script>
+let deferredInstallPrompt=null;
+const installButton=document.getElementById("installBtn");
+window.addEventListener("beforeinstallprompt",event=>{
+  event.preventDefault(); deferredInstallPrompt=event; installButton.hidden=false;
+});
+installButton?.addEventListener("click",async()=>{
+  if(!deferredInstallPrompt)return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null; installButton.hidden=true;
+});
+window.addEventListener("appinstalled",()=>{installButton.hidden=true;});
+if("serviceWorker" in navigator && location.protocol!=="file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
+</body></html>
